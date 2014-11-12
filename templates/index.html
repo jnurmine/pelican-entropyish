@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block content_title %}{% endblock %}
+{% block content %}
+{% if articles %}
+    {% for article in articles_page.object_list %}
+        {# First item #}
+        {% if loop.first and not articles_page.has_previous() %}
+            <div class="spacer">
+                <ul>
+                    <li>Newest post</li>
+                </ul>
+            </div>
+            <article>
+                <div class="container">
+                    <h1><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h1>
+                    <div class="copy">
+                        {{ article.content }}
+                    </div>
+                    {% include 'comments.html' %}
+                </div>
+            </article>
+            {% if loop.length == 1 %}
+                {% include 'pagination.html' %}
+            {% else %}
+            <div class="spacer">
+                <ul>
+                    <li>Previous posts</li>
+                </ul>
+            </div>
+            {% endif %}
+        {# other items #}
+        {% else %}
+            <article>
+                <div class="container">
+                    <h1><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></h1>
+                    <div class="copy">
+                        <div class="summary">{{ article.summary }}</div>
+                        <p><a class="read-more" href="/{{ article.url }}">{{ READ_MORE_LINK }}</a></p>
+                    </div>
+                    {% include 'comments.html' %}
+                </div>
+            </article>
+
+            {% if loop.first and articles_page.has_previous %}
+            <!-- TODO -->
+            {% endif %}
+        {% endif %}
+        {% if loop.last %}
+            {% if articles_page.has_previous() or loop.length > 1 %}
+                {% include 'pagination.html' %}
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+{% else %}
+<section id="content" class="body">
+    {% for page in PAGES %}
+	<article>
+		<div class="container">
+            <h2><{{ page.title }}</h2>
+            <!-- TODO -->
+            {{ page.content }}
+		</div>
+	</article>
+    {% endfor %}
+{% endif %}
+{% endblock content %}

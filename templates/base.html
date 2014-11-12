@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+<meta name="author" content="Jani Nurminen">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0">
+<link rel="stylesheet" href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/style.css"/>
+
+{% if FEED_ALL_ATOM %}
+<link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate" title="{{ SITENAME }} Atom Feed" />
+{% endif %}
+{% if FEED_ALL_RSS %}
+<link href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate" title="{{ SITENAME }} RSS Feed" />
+{% endif %}
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,700">
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Oswald:300">
+<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+</head>
+
+<body>
+	<header>
+		<div class="header-inner">
+			<div id="photo">
+				<a href="{{ SITEURL }}/">&nbsp;</a>
+			</div>
+			<div class="title">
+                <h1><a href="{{ SITEURL }}/">{{ SITENAME }}</a></h1>
+                {% if SITESUBTITLE %}<p class="subtitle">{{ SITESUBTITLE }}</p>{% endif %}
+				<ul>
+                    {% for title, link in MENUITEMS %}
+                        <li><a href="{{ link }}">{{ title }}</a></li>
+                    {% endfor %}
+                    {% if DISPLAY_PAGES_ON_MENU -%}
+                    {% for pg in PAGES %}
+                        <li{% if pg == page %}{% endif %}><a href="{{ SITEURL }}/{{ pg.url }}">{{ pg.title }}</a></li>
+                    {% endfor %}
+                    {% endif %}
+                    {% if DISPLAY_CATEGORIES_ON_MENU -%}
+                    {% for cat, null in categories %}
+                        <li{% if cat == category %}{% endif %}><a href="{{ SITEURL }}/{{ cat.url }}">{{ cat }}</a></li>
+                    {% endfor %}
+                    {% endif %}
+				</ul>
+			</div>
+		</div>
+	</header>
+    {% block content %}
+    {% endblock %}
+
+    <footer>
+    {% if FEED_ALL_ATOM or FEED_ALL_RSS %}
+        <div class="container">
+            <h2>Subscribe</h2>
+            <ul>
+                {% if FEED_ALL_ATOM %}
+                <li><a href="{{ FEED_DOMAIN }}/{{ FEED_ALL_ATOM }}" type="application/atom+xml" rel="alternate">atom feed</a></li>
+                {% endif %}
+                {% if FEED_ALL_RSS %}
+                <li><a href="{{ FEED_DOMAIN }}/{{ FEED_ALL_RSS }}" type="application/rss+xml" rel="alternate">rss feed</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+        <div class="container">
+            <p>{{ FOOTER_TEXT }}</p>
+            <p>Fork <a href="https://github.com/jnurmine/pelican-entropyish">the theme</a> at Github.</p>
+        </div>
+    </footer>
+{% include 'analytics.html' %}
+{% include 'disqus_script.html' %}
+</body>
+</html>
